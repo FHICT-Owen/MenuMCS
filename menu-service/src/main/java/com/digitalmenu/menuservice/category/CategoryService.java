@@ -10,8 +10,9 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
 
-    public CategoryService()
-    {
+    @Autowired
+    public CategoryService(CategoryRepository categoryRepository) {
+        this.categoryRepository = categoryRepository;
     }
 
     public void DeleteCategory(Long categoryId)
@@ -20,10 +21,7 @@ public class CategoryService {
     }
 
 
-    @Autowired
-    public CategoryService(CategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
-    }
+
 
     public List<Category> getCategories(){
         return categoryRepository.findAll();

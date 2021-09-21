@@ -9,12 +9,10 @@ public class CategoryConfig {
 
     @Bean
     CommandLineRunner commandLineRunner(CategoryRepository repository) {
-        return args -> {
-            new Category(
-                    1L,
-                    "Vlees"
-            );
-        };
+        return args -> new Category(
+                1L,
+                "Meat"
+        );
     }
 
 }

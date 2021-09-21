@@ -20,9 +20,6 @@ public class CategoryService {
         System.out.println("category " + categoryId + " deleted!");
     }
 
-
-
-
     public List<Category> getCategories(){
         return categoryRepository.findAll();
     }

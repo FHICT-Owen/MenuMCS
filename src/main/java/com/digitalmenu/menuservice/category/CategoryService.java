@@ -18,7 +18,7 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-    public void DeleteCategory(Long categoryId)
+    public void deleteCategory(Long categoryId)
     {
         boolean exists = categoryRepository.existsById(categoryId);
         if (!exists) {
@@ -36,7 +36,7 @@ public class CategoryService {
         categoryRepository.save(myCategory);
     }*/
 
-    public boolean UpdateCategory(Long id, Category category) {
+    public boolean updateCategory(Long id, Category category) {
         Optional<Category> optionalCategory = categoryRepository.findById(id);
         if (optionalCategory.isPresent()) {
             Category actualCategory = optionalCategory.get();
@@ -47,7 +47,7 @@ public class CategoryService {
         return false;
     }
 
-    public List<Category> GetCategories(){
+    public List<Category> getCategories(){
         return categoryRepository.findAll();
     }
 }

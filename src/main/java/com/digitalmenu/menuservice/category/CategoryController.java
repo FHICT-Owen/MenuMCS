@@ -1,7 +1,5 @@
 package com.digitalmenu.menuservice.category;
 
-import javassist.NotFoundException;
-import org.hibernate.annotations.NotFound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,21 +19,21 @@ public class CategoryController {
     }
 
     @GetMapping
-    public List<Category> GetCategories()
+    public List<Category> getCategories()
     {
-        return categoryService.GetCategories();
+        return categoryService.getCategories();
     }
 
     @PutMapping(path = "/update/{categoryId}")
-    public ResponseEntity<Category> UpdateCategory(@RequestBody Category category, @PathVariable("categoryId") Long categoryId) {
-        boolean success = categoryService.UpdateCategory(categoryId, category);
+    public ResponseEntity<Category> updateCategory(@RequestBody Category category, @PathVariable("categoryId") Long categoryId) {
+        boolean success = categoryService.updateCategory(categoryId, category);
         if (success)
             return new ResponseEntity<>(category, HttpStatus.OK);
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping(path = "{categoryId}")
-    public void DeleteCategory(@PathVariable("categoryId") Long categoryId) {
-        categoryService.DeleteCategory(categoryId);
+    public void deleteCategory(@PathVariable("categoryId") Long categoryId) {
+        categoryService.deleteCategory(categoryId);
     }
 }

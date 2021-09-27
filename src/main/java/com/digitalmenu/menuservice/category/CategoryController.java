@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -24,8 +25,13 @@ public class CategoryController {
         return categoryService.getCategories();
     }
 
+    @PostMapping
+    public void createCategory(@RequestBody Category category){
+        categoryService.createCategory(category);
+    }
+
     @PutMapping(path = "/update/{categoryId}")
-    public ResponseEntity<Category> updateCategory(@RequestBody Category category, @PathVariable("categoryId") Long categoryId) {
+    public ResponseEntity<Category> updateCategory(@RequestBody Category category, @PathVariable("categoryId") Integer categoryId) {
         boolean success = categoryService.updateCategory(categoryId, category);
         if (success)
             return new ResponseEntity<>(category, HttpStatus.OK);
@@ -33,7 +39,7 @@ public class CategoryController {
     }
 
     @DeleteMapping(path = "{categoryId}")
-    public void deleteCategory(@PathVariable("categoryId") Long categoryId) {
+    public void deleteCategory(@PathVariable("categoryId") Integer categoryId) {
         categoryService.deleteCategory(categoryId);
     }
 }

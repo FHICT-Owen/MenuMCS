@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin
 @RestController
 @RequestMapping("api/v1/dish")
 public class DishController {
@@ -14,6 +15,12 @@ public class DishController {
     @Autowired
     public DishController(DishService dishService) {
         this.dishService = dishService;
+    }
+
+    @GetMapping
+    public List<Dish> getCategories()
+    {
+        return dishService.getDishes();
     }
 
     @PostMapping

@@ -1,10 +1,9 @@
 package com.digitalmenu.menuservice.dish;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/v1/dish")
@@ -22,4 +21,11 @@ public class DishController {
         dishService.createDish(dish);
     }
 
+    @PutMapping(path = "/update/{dishId}")
+    public ResponseEntity<Dish> updateDish(@RequestBody Dish dish, @PathVariable("dishId") Integer dishId) {
+        boolean success = dishService.updateDish(dishId, dish);
+        if (success)
+            return new ResponseEntity<>(dish, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 }

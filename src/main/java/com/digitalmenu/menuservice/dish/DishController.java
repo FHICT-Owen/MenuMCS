@@ -29,6 +29,10 @@ public class DishController {
         dishService.createDish(dish);
     }
 
+    @DeleteMapping("/{id}")
+    public void deleteDish(@PathVariable Integer id) {
+        dishService.removeDish(id);
+
     @PutMapping(path = "/update/{dishId}")
     public ResponseEntity<Dish> updateDish(@RequestBody Dish dish, @PathVariable("dishId") Integer dishId) {
         boolean success = dishService.updateDish(dishId, dish);

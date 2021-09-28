@@ -1,10 +1,14 @@
 package com.digitalmenu.menuservice.category;
 
+import com.digitalmenu.menuservice.dish.Dish;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.persistence.EntityExistsException;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,7 +22,7 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-    public void deleteCategory(Long categoryId)
+    public void deleteCategory(Integer categoryId)
     {
         boolean exists = categoryRepository.existsById(categoryId);
         if (!exists) {
@@ -30,13 +34,15 @@ public class CategoryService {
         }
     }
 
-  /*  public void UpdateCategory(long id, String name) {
-        Category myCategory = categoryRepository.findById(id);
-        myCategory.name = name;
-        categoryRepository.save(myCategory);
-    }*/
+    public void createCategory(Category category) {
+        Optional<Category> categoryByName = categoryRepository.findCategoryByName(category.getName());
+        if (categoryByName.isPresent()) {
+            throw new EntityExistsException("Name already taken!");
+        }
+        categoryRepository.save(category);
+    }
 
-    public boolean updateCategory(Long id, Category category) {
+    public boolean updateCategory(Integer id, Category category) {
         Optional<Category> optionalCategory = categoryRepository.findById(id);
         if (optionalCategory.isPresent()) {
             Category actualCategory = optionalCategory.get();

@@ -35,5 +35,17 @@ public class DishService {
 
     public void removeDish(Integer id){
         dishRepository.deleteDishById(id);
+
+    public boolean updateDish(Integer id, Dish dish) {
+        Optional<Dish> optionalDish = dishRepository.findById(id);
+        if (optionalDish.isPresent()) {
+            Dish actualDish = optionalDish.get();
+            actualDish.setName(dish.getName());
+            actualDish.setDescription(dish.getDescription());
+            actualDish.setImage(dish.getImage());
+            dishRepository.save(actualDish);
+            return true;
+        }
+        return false;
     }
 }

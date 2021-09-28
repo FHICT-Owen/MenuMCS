@@ -1,6 +1,8 @@
 package com.digitalmenu.menuservice.dish;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,5 +32,12 @@ public class DishController {
     @DeleteMapping("/{id}")
     public void deleteDish(@PathVariable Integer id) {
         dishService.removeDish(id);
+
+    @PutMapping(path = "/update/{dishId}")
+    public ResponseEntity<Dish> updateDish(@RequestBody Dish dish, @PathVariable("dishId") Integer dishId) {
+        boolean success = dishService.updateDish(dishId, dish);
+        if (success)
+            return new ResponseEntity<>(dish, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

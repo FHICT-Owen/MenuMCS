@@ -33,8 +33,9 @@ public class DishService {
         dishRepository.save(dish);
     }
 
-    public void removeDish(Integer id){
+    public void removeDish(Integer id) {
         dishRepository.deleteDishById(id);
+    }
 
     public boolean updateDish(Integer id, Dish dish) {
         Optional<Dish> optionalDish = dishRepository.findById(id);

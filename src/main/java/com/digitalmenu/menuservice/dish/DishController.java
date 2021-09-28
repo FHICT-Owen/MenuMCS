@@ -27,4 +27,7 @@ public class DishController {
         dishService.createDish(dish);
     }
 
+//    @DeleteMapping
+//    public void removeDish(@RequestBody Integer id) { dishService.removeDish(id);}
+
 }

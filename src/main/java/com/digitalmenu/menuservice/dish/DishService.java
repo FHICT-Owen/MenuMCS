@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,4 +30,12 @@ public class DishService {
         }
         dishRepository.save(dish);
     }
+
+//    public void removeDish(Integer id){
+//        Optional<Dish> dishById = dishRepository.findDishById(id);
+//        if (!dishById.isPresent()) {
+//            throw new EntityNotFoundException("Id not found!");
+//        }
+//        dishRepository.delete(dishRepository.findDishById(id).get());
+//    }
 }

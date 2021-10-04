@@ -1,5 +1,5 @@
 package com.digitalmenu.menuservice.category;
-
+import com.digitalmenu.menuservice.dish.Dish;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,13 +34,33 @@ class CategoryRepositoryTest {
     void itShouldFindCategoryByName() {
         // given
         Category category = new Category(
+                1,
                 "Meat"
         );
         underTest.save(category);
+        String name = "Meat";
         // when
-        var expected = underTest.findCategoryByName("Meat");
+        var expected = underTest.findCategoryByName(name);
         // then
         assertThat(expected).isNotEmpty();
+    }
 
+    @Test
+    void itShouldFindAllCategories() {
+        // given
+        Category category_1 = new Category(
+                1,
+                "Meat"
+        );
+        Category category_2 = new Category(
+                2,
+                "Vegetables"
+        );
+        underTest.save(category_1);
+        underTest.save(category_2);
+        // when
+        var expected = underTest.findAll();
+        // then
+        assertThat(expected).isNotNull();
     }
 }

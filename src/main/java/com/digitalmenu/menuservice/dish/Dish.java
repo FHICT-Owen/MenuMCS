@@ -22,6 +22,12 @@ public class Dish {
 
     public Dish() { }
 
+    public Dish(Integer id, String name, String description) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+    }
+
     public String getName() {
         return name;
     }

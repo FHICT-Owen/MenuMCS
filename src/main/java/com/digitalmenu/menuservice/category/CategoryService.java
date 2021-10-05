@@ -1,14 +1,9 @@
 package com.digitalmenu.menuservice.category;
 
-import com.digitalmenu.menuservice.dish.Dish;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.persistence.EntityExistsException;
-import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,5 +50,10 @@ public class CategoryService {
 
     public List<Category> getCategories(){
         return categoryRepository.findAll();
+    }
+
+
+    public Optional<Category> getCategoryById(Integer id){
+        return categoryRepository.findById(id);
     }
 }

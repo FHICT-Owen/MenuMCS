@@ -1,11 +1,14 @@
 package com.digitalmenu.menuservice.dish;
 
+import com.digitalmenu.menuservice.category.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
+
 @CrossOrigin
 @RestController
 @RequestMapping("api/v1/dish")
@@ -18,8 +21,11 @@ public class DishController {
         this.dishService = dishService;
     }
 
+    @GetMapping("/{dishName}")
+    public Optional<Dish> getDishByName(@PathVariable("dishName") String dishName) { return dishService.getDishByName(dishName);}
+
     @GetMapping
-    public List<Dish> getCategories()
+    public List<Dish> getDishes()
     {
         return dishService.getDishes();
     }

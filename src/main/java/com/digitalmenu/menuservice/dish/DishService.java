@@ -49,4 +49,8 @@ public class DishService {
         }
         return false;
     }
+
+    public Optional<Dish> getDishByName(String name){
+        return dishRepository.findDishByName(name);
+    }
 }

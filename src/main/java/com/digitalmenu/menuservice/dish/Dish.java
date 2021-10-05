@@ -22,6 +22,10 @@ public class Dish {
 
     public Dish() { }
 
+    public Dish(String name) {
+        this.name = name;
+    }
+
     public Dish(Integer id, String name, String description) {
         this.id = id;
         this.name = name;

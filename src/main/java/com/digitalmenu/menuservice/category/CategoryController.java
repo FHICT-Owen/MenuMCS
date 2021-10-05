@@ -4,12 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
+@CrossOrigin
 @RestController
-@RequestMapping(path = "api/v1/category")
+@RequestMapping(path = "api/v1/categories")
 public class CategoryController {
 
     private final CategoryService categoryService;
@@ -18,6 +18,9 @@ public class CategoryController {
     public CategoryController(CategoryService categoryService) {
         this.categoryService = categoryService;
     }
+
+    @GetMapping("/{categoryId}")
+    public Optional<Category> getCategoryById(@PathVariable("categoryId") Integer categoryId) { return categoryService.getCategoryById(categoryId);}
 
     @GetMapping
     public List<Category> getCategories()
@@ -38,7 +41,7 @@ public class CategoryController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @DeleteMapping(path = "{categoryId}")
+    @DeleteMapping(path = "/delete/{categoryId}")
     public void deleteCategory(@PathVariable("categoryId") Integer categoryId) {
         categoryService.deleteCategory(categoryId);
     }

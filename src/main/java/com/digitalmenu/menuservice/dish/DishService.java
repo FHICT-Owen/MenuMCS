@@ -1,15 +1,13 @@
 package com.digitalmenu.menuservice.dish;
 
-import com.digitalmenu.menuservice.category.Category;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityExistsException;
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
+
 @Transactional
 @Service
 public class DishService {

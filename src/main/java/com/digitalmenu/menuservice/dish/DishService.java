@@ -32,6 +32,10 @@ public class DishService {
     }
 
     public void removeDish(Integer id) {
+        boolean exists = dishRepository.existsById(id);
+        if (!exists) {
+            throw new IllegalStateException("Dish with id " + id + " does not exists");
+        }
         dishRepository.deleteDishById(id);
     }
 

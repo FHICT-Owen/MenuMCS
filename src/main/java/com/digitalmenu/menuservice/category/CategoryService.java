@@ -17,16 +17,13 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-    public void deleteCategory(Integer categoryId)
-    {
+    public void deleteCategory(Integer categoryId) {
         boolean exists = categoryRepository.existsById(categoryId);
         if (!exists) {
             throw new IllegalStateException("Category with id " + categoryId + " does not exists");
         }
-        else {
-            categoryRepository.deleteById(categoryId);
-            System.out.println("category " + categoryId + " deleted!");
-        }
+        categoryRepository.deleteById(categoryId);
+        System.out.println("category " + categoryId + " deleted!");
     }
 
     public void createCategory(Category category) {

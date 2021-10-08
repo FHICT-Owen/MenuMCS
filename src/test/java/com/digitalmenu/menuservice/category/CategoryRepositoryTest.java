@@ -35,10 +35,10 @@ class CategoryRepositoryTest {
         // given
         Category category = new Category(
                 1,
-                "Meat"
+                "meat"
         );
         underTest.save(category);
-        String name = "Meat";
+        String name = "meat";
         // when
         var expected = underTest.findCategoryByName(name);
         // then

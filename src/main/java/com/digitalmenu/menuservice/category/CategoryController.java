@@ -19,8 +19,8 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    @GetMapping("/{categoryId}")
-    public Optional<Category> getCategoryById(@PathVariable("categoryId") Integer categoryId) { return categoryService.getCategoryById(categoryId);}
+    @GetMapping("/{categoryName}")
+    public Optional<Category> getCategoryByName(@PathVariable("categoryName") String categoryName) { return categoryService.getCategoryByName(categoryName);}
 
     @GetMapping
     public List<Category> getCategories()

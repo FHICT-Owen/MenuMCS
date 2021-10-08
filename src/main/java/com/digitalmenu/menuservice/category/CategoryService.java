@@ -49,8 +49,6 @@ public class CategoryService {
         return categoryRepository.findAll();
     }
 
+    public Optional<Category> getCategoryByName(String name) {return categoryRepository.findCategoryByName(name);}
 
-    public Optional<Category> getCategoryById(Integer id){
-        return categoryRepository.findById(id);
-    }
 }

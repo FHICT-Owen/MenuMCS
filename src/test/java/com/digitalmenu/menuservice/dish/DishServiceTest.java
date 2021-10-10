@@ -95,13 +95,33 @@ class DishServiceTest {
         dishRepository.save(dish);
 
         //when
-        // then
         underTest.removeDish(any());
+
+        // then
         verify(dishRepository.deleteDishById(1));
     }
 
     @Test
-    @Disabled
     void updateDish() {
+        // given
+        Dish dish = new Dish(
+                1,
+                "Pumpkin soup",
+                "Good soup",
+                "Soup"
+        );
+        dishRepository.save(dish);
+
+        //when
+        Dish newDish = new Dish(
+                1,
+                "Pumpkin soup",
+                "Bad soup",
+                "Soup"
+        );
+        underTest.updateDish(1, newDish);
+
+        // then
+        assertThat(underTest.getDishByName("Pumpkin soup")).isNotEqualTo(dish);
     }
 }

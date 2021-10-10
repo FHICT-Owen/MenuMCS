@@ -103,7 +103,21 @@ class DishServiceTest {
     }
 
     @Test
-    @Disabled
     void updateDish() {
+        Dish dish = new Dish(
+            1,
+            "Pumpkin soup",
+            "Good Soup"
+        );
+        dishRepository.save(dish);
+        //when
+        // then
+        Dish newDish = new Dish(
+          1,
+          "Pumpkin soup",
+          "Bad soup"
+        );
+        underTest.updateDish(1, newDish);
+        assertThat(underTest.getDishByName("Pumpkin soup")).isNotEqualTo(dish);
     }
 }

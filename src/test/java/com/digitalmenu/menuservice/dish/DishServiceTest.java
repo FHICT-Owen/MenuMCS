@@ -1,22 +1,17 @@
 package com.digitalmenu.menuservice.dish;
 
-import org.aspectj.lang.annotation.After;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityExistsException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
@@ -49,7 +44,8 @@ class DishServiceTest {
         Dish dish = new Dish(
                 1,
                 "Pumpkin soup",
-                "Good Soup"
+                "Good Soup",
+                "soup"
         );
 
         // when
@@ -72,7 +68,8 @@ class DishServiceTest {
         Dish dish = new Dish(
                 1,
                 "Pumpkin soup",
-                "Good Soup"
+                "Good Soup",
+                "soup"
         );
 
         given(dishRepository.findDishByName(anyString()))
@@ -92,7 +89,8 @@ class DishServiceTest {
         Dish dish = new Dish(
                 1,
                 "Pumpkin soup",
-                "Good Soup"
+                "Good Soup",
+                "soup"
         );
         dishRepository.save(dish);
 

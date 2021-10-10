@@ -33,7 +33,7 @@ public class CategoryController {
         categoryService.createCategory(category);
     }
 
-    @PutMapping(path = "/update/{categoryId}")
+    @PutMapping(path = "/{categoryId}")
     public ResponseEntity<Category> updateCategory(@RequestBody Category category, @PathVariable("categoryId") Integer categoryId) {
         boolean success = categoryService.updateCategory(categoryId, category);
         if (success)
@@ -41,7 +41,7 @@ public class CategoryController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @DeleteMapping(path = "/delete/{categoryId}")
+    @DeleteMapping(path = "/{categoryId}")
     public void deleteCategory(@PathVariable("categoryId") Integer categoryId) {
         categoryService.deleteCategory(categoryId);
     }

@@ -19,6 +19,7 @@ public class Dish {
     private String name;
     private String description;
     private Byte[] image;
+    private String category;
 
     public Dish() { }
 
@@ -26,10 +27,11 @@ public class Dish {
         this.name = name;
     }
 
-    public Dish(Integer id, String name, String description) {
+    public Dish(Integer id, String name, String description, String category) {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.category = category;
     }
 
     public Integer getId() {
@@ -62,5 +64,13 @@ public class Dish {
 
     public void setImage(Byte[] image) {
         this.image = image;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 }

@@ -1,13 +1,9 @@
 package com.digitalmenu.menuservice.dish;
 
-import com.digitalmenu.menuservice.category.Category;
-import com.digitalmenu.menuservice.dish.DishRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-
-import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -29,7 +25,8 @@ public class DishRepositoryTest {
         Dish dish = new Dish(
                 1,
                 "Pumpkin soup",
-                "Good Soup"
+                "Good Soup",
+                "Soup"
         );
         underTest.save(dish);
         // when
@@ -44,7 +41,8 @@ public class DishRepositoryTest {
         Dish dish = new Dish(
                 1,
                 "Pumpkin soup",
-                "Good Soup"
+                "Good Soup",
+                "Soup"
         );
         underTest.save(dish);
         String name = "Pumpkin soup";
@@ -60,12 +58,14 @@ public class DishRepositoryTest {
         Dish dish_1 = new Dish(
                 1,
                 "Pumpkin soup",
-                "Good Soup"
+                "Good Soup",
+                "Soup"
         );
         Dish dish_2 = new Dish(
                 2,
                 "French Fries",
-                "Good Fries"
+                "Good Fries",
+                "Soup"
         );
         underTest.save(dish_1);
         underTest.save(dish_2);

@@ -51,36 +51,4 @@ public class DishRepositoryTest {
         // then
         assertThat(expected).isNotEmpty();
     }
-
-    @Test
-    void itShouldFindAllDishes() {
-        // given
-        Dish dish_1 = new Dish(
-                1,
-                "Pumpkin soup",
-                "Good Soup",
-                "Soup"
-        );
-        Dish dish_2 = new Dish(
-                2,
-                "French Fries",
-                "Good Fries",
-                "Soup"
-        );
-        underTest.save(dish_1);
-        underTest.save(dish_2);
-        // when
-        var expected = underTest.findAll();
-        // then
-        assertThat(expected).isNotNull();
-    }
-
-    @Test
-    void itShouldFindNoDishes() {
-        // given
-        // when
-        var expected = underTest.findAll();
-        // then
-        assertTrue(expected.isEmpty());
-    }
 }

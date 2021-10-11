@@ -44,23 +44,4 @@ class CategoryRepositoryTest {
         // then
         assertThat(expected).isNotEmpty();
     }
-
-    @Test
-    void itShouldFindAllCategories() {
-        // given
-        Category category_1 = new Category(
-                1,
-                "Meat"
-        );
-        Category category_2 = new Category(
-                2,
-                "Vegetables"
-        );
-        underTest.save(category_1);
-        underTest.save(category_2);
-        // when
-        var expected = underTest.findAll();
-        // then
-        assertThat(expected).isNotNull();
-    }
 }

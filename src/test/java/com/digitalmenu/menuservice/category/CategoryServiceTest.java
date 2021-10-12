@@ -1,4 +1,5 @@
 package com.digitalmenu.menuservice.category;
+import com.digitalmenu.menuservice.dish.Dish;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -53,6 +54,26 @@ public class CategoryServiceTest {
         Category capturedCategory = dishArgumentCaptor.getValue();
 
         assertThat(capturedCategory).isEqualTo(category);
+    }
+
+    @Test
+    void updateCategory() {
+        // given
+        Category category = new Category(
+                1,
+                "meat"
+        );
+        categoryRepository.save(category);
+
+        //when
+        Category newCategory = new Category(
+                1,
+                "vegetables"
+        );
+        underTest.updateCategory(1, newCategory);
+
+        // then
+        assertThat(underTest.getCategoryByName("vegetables")).isNotEqualTo(category);
     }
 
     @Test

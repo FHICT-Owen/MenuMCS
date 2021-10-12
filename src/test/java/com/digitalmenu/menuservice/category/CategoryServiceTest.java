@@ -37,23 +37,23 @@ public class CategoryServiceTest {
     @Test
     void canCreateCategory() {
         // given
-        Category category = new Category(
+        Category expected = new Category(
                 1,
                 "Meat"
         );
 
         // when
-        underTest.createCategory(category);
+        underTest.createCategory(expected);
 
-        // then
         ArgumentCaptor<Category> dishArgumentCaptor =
                 ArgumentCaptor.forClass(Category.class);
         verify(categoryRepository)
                 .save(dishArgumentCaptor.capture());
 
-        Category capturedCategory = dishArgumentCaptor.getValue();
+        Category actual = dishArgumentCaptor.getValue();
 
-        assertThat(capturedCategory).isEqualTo(category);
+        // then
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test

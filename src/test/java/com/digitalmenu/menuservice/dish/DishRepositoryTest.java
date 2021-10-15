@@ -30,9 +30,10 @@ public class DishRepositoryTest {
         );
         underTest.save(dish);
         // when
-        var expected = underTest.deleteDishById(1);
+        underTest.deleteDishById(1);
+        var expected = underTest.existsById(1);
         // then
-        assertThat(expected).isEqualTo(0);
+        assertThat(expected).isNotEqualTo(true);
     }
 
     @Test

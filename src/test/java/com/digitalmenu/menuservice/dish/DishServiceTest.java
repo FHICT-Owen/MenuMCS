@@ -42,7 +42,7 @@ class DishServiceTest {
     void canCreateDish() {
         // given
         Dish dish = new Dish(
-                1,
+                5,
                 "Pumpkin soup",
                 "Good Soup",
                 "soup"
@@ -83,7 +83,6 @@ class DishServiceTest {
     }
 
     @Test
-    @Disabled
     void removeDish() {
         // given
         Dish dish = new Dish(
@@ -98,7 +97,8 @@ class DishServiceTest {
         underTest.removeDish(any());
 
         // then
-        verify(dishRepository.deleteDishById(1));
+        dishRepository.deleteDishById(1);
+        verify(dishRepository.existsById(1)).equals(false);
     }
 
     @Test

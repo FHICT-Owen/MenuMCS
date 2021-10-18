@@ -20,9 +20,9 @@ public class Dish {
     private Integer id;
     private String name;
     private String description;
+    private String category;
     @Type(type = "org.hibernate.type.TextType")
     private String image;
-    private String category;
 //    @ElementCollection
 //    private Set<String> ingredients;
 
@@ -63,20 +63,20 @@ public class Dish {
         this.description = description;
     }
 
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
     public String getCategory() {
         return category;
     }
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
 //    public Set<String> getIngredients() {

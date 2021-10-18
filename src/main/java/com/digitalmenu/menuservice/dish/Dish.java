@@ -1,5 +1,7 @@
 package com.digitalmenu.menuservice.dish;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 
 @Entity
@@ -18,8 +20,11 @@ public class Dish {
     private Integer id;
     private String name;
     private String description;
-    private Byte[] image;
+    @Type(type = "org.hibernate.type.TextType")
+    private String image;
     private String category;
+//    @ElementCollection
+//    private Set<String> ingredients;
 
     public Dish() { }
 
@@ -58,11 +63,11 @@ public class Dish {
         this.description = description;
     }
 
-    public Byte[] getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(Byte[] image) {
+    public void setImage(String image) {
         this.image = image;
     }
 
@@ -73,4 +78,12 @@ public class Dish {
     public void setCategory(String category) {
         this.category = category;
     }
+
+//    public Set<String> getIngredients() {
+//        return ingredients;
+//    }
+//
+//    public void setIngredients(Set<String> ingredients) {
+//        this.ingredients = ingredients;
+//    }
 }

@@ -47,6 +47,7 @@ public class DishService {
             actualDish.setDescription(dish.getDescription());
             actualDish.setImage(dish.getImage());
             actualDish.setCategory(dish.getCategory());
+            actualDish.setIngredients(dish.getIngredients());
             dishRepository.save(actualDish);
             return true;
         }

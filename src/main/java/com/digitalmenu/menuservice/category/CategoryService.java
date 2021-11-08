@@ -1,5 +1,6 @@
 package com.digitalmenu.menuservice.category;
 
+import com.digitalmenu.menuservice.exception.ApiRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,10 +21,11 @@ public class CategoryService {
     public void deleteCategory(Integer categoryId) {
         boolean exists = categoryRepository.existsById(categoryId);
         if (!exists) {
-            throw new IllegalStateException("Category with id " + categoryId + " does not exists");
+            throw new ApiRequestException("Category with id " + categoryId + " does not exists");
         }
-        categoryRepository.deleteById(categoryId);
-        System.out.println("category " + categoryId + " deleted!");
+        else {
+            categoryRepository.deleteById(categoryId);
+        }
     }
 
     public void createCategory(Category category) {

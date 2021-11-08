@@ -16,7 +16,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class CategoryServiceTest {
+public class CategoryServiceUnitTest {
     @Mock
     private CategoryRepository categoryRepository ;
     private CategoryService underTest;
@@ -24,6 +24,23 @@ public class CategoryServiceTest {
     @BeforeEach
     void setUp() {
         underTest = new CategoryService(categoryRepository);
+    }
+
+    @Test
+    void CanDeleteCategory() {
+        // given
+        underTest.deleteCategory(1);
+        // when
+        // then
+    }
+
+    @Test
+    void CantDeleteCategoryBecauseIdDoesNotExist()
+    {
+        // given
+        underTest.deleteCategory(99);
+        // when
+        // then
     }
 
     @Test

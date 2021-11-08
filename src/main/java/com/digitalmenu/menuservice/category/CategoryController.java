@@ -1,5 +1,7 @@
 package com.digitalmenu.menuservice.category;
 
+import com.digitalmenu.menuservice.exception.ApiException;
+import com.digitalmenu.menuservice.exception.ApiRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,12 +27,25 @@ public class CategoryController {
     @GetMapping
     public List<Category> getCategories()
     {
-        return categoryService.getCategories();
+        try
+        {
+            return categoryService.getCategories();
+        }
+        catch (Exception ex)
+        {
+            throw new ApiRequestException("Can't retrieve categories");
+        }
     }
 
     @PostMapping
     public void createCategory(@RequestBody Category category){
-        categoryService.createCategory(category);
+        try {
+            categoryService.createCategory(category);
+        }
+        catch (Exception ex)
+        {
+            throw new ApiRequestException("Can't add category");
+        }
     }
 
     @PutMapping(path = "/{categoryId}")

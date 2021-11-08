@@ -45,9 +45,11 @@ public class DishService {
             Dish actualDish = optionalDish.get();
             actualDish.setName(dish.getName());
             actualDish.setDescription(dish.getDescription());
-            actualDish.setImage(dish.getImage());
             actualDish.setCategory(dish.getCategory());
+            actualDish.setDietaryRestrictions(dish.getDietaryRestrictions());
             actualDish.setIngredients(dish.getIngredients());
+            actualDish.setPrize(dish.getPrize());
+            actualDish.setImage(dish.getImage());
             dishRepository.save(actualDish);
             return true;
         }

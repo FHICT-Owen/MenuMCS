@@ -23,7 +23,10 @@ public class Dish {
     private String description;
     private String category;
     @ElementCollection
+    private Set<String> dietaryRestrictions;
+    @ElementCollection
     private Set<String> ingredients;
+    private Double prize;
     @Type(type = "org.hibernate.type.TextType")
     private String image;
 
@@ -72,12 +75,28 @@ public class Dish {
         this.category = category;
     }
 
+    public Set<String> getDietaryRestrictions() {
+        return dietaryRestrictions;
+    }
+
+    public void setDietaryRestrictions(Set<String> dietaryRestrictions) {
+        this.dietaryRestrictions = dietaryRestrictions;
+    }
+
     public Set<String> getIngredients() {
         return ingredients;
     }
 
     public void setIngredients(Set<String> ingredients) {
         this.ingredients = ingredients;
+    }
+
+    public Double getPrize() {
+        return prize;
+    }
+
+    public void setPrize(Double prize) {
+        this.prize = prize;
     }
 
     public String getImage() {

@@ -35,21 +35,37 @@ public class CategoryService {
         categoryRepository.save(category);
     }
 
-    public boolean updateCategory(Integer id, Category category) {
+    public void updateCategory(Integer id, Category category) {
         Optional<Category> optionalCategory = categoryRepository.findById(id);
         if (optionalCategory.isPresent()) {
             Category actualCategory = optionalCategory.get();
             actualCategory.setName(category.getName());
             categoryRepository.save(actualCategory);
-            return true;
         }
-        return false;
+        else
+        {
+            throw new ApiRequestException("There is no category found with id " + id);
+        }
     }
 
     public List<Category> getCategories(){
-        return categoryRepository.findAll();
+        if (categoryRepository.count() == 0)
+        {
+            throw new ApiRequestException("There are no categories found");
+        }
+        else {
+            return categoryRepository.findAll();
+        }
     }
 
-    public Optional<Category> getCategoryByName(String name) {return categoryRepository.findCategoryByName(name);}
-
+    public Optional<Category> getCategoryByName(String name) {
+        Optional<Category> category = categoryRepository.findCategoryByName(name);
+        if (category.isPresent())
+        {
+            return category;
+        }
+        else {
+            throw new ApiRequestException("There is no category found with name " + name);
+        }
+    }
 }

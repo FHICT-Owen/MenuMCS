@@ -1,5 +1,6 @@
 package com.digitalmenu.menuservice.dish;
 
+import com.digitalmenu.menuservice.exception.ApiRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,9 +27,6 @@ public class DishService {
 
     public void createDish(Dish dish) {
         Optional<Dish> dishByName = dishRepository.findDishByName(dish.getName());
-        if (dishByName.get().getName().isEmpty()) {
-            throw new EntityNotFoundException("Name is empty!");
-        }
         if (dishByName.isPresent()) {
             throw new EntityExistsException("Name already taken!");
         }
@@ -36,12 +34,13 @@ public class DishService {
         dishRepository.save(dish);
     }
 
-    public void removeDish(Integer id) {
-        boolean exists = dishRepository.existsById(id);
-        if (!exists) {
-            throw new IllegalStateException("Dish with id " + id + " does not exist");
+    public void removeDish(Integer dishId) {
+        if (!dishRepository.existsById(dishId)) {
+            throw new ApiRequestException("Category with id " + dishId + " does not exists");
         }
-        dishRepository.deleteDishById(id);
+        else {
+            dishRepository.deleteById(dishId);
+        }
     }
 
     public boolean updateDish(Integer id, Dish dish) {

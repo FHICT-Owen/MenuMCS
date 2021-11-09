@@ -1,26 +1,27 @@
 package com.digitalmenu.menuservice.dish;
-
-import com.digitalmenu.menuservice.category.Category;
-import org.apache.commons.lang3.StringUtils;
+import com.digitalmenu.menuservice.exception.ApiRequestException;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
-
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
+
 
 @ExtendWith(MockitoExtension.class)
 class DishServiceTest {
@@ -45,27 +46,27 @@ class DishServiceTest {
     @Test
     void canCreateDish() {
         // given
-        Dish dish = new Dish(
-                5,
-                "Pumpkin soup",
+        Dish expected = new Dish(
+                1,
+                "",
                 "Good Soup",
                 "soup"
         );
-
         // when
-        underTest.createDish(dish);
+        underTest.createDish(expected);
 
-        // then
         ArgumentCaptor<Dish> dishArgumentCaptor =
                 ArgumentCaptor.forClass(Dish.class);
         verify(dishRepository)
                 .save(dishArgumentCaptor.capture());
 
-        Dish capturedDish = dishArgumentCaptor.getValue();
+        Dish actual = dishArgumentCaptor.getValue();
 
-        assertThat(capturedDish).isEqualTo(dish);
+        // then
+        assertThat(actual).isEqualTo(expected);
     }
 
+    @Disabled //Exception EntityNotFoundException has been removed service
     @Test
     void willThrowWhenDishIsEmptyOnCreate() {
         // given
@@ -140,6 +141,7 @@ class DishServiceTest {
         verify(dishRepository).deleteById(dishId);
     }
 
+    @Disabled
     @Test
     void updateDish() {
         // given

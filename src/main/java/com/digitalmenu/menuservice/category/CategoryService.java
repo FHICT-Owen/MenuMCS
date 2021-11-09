@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,7 +36,7 @@ public class CategoryService {
         categoryRepository.save(category);
     }
 
-    public void updateCategory(Integer id, Category category) {
+    public boolean updateCategory(Integer id, Category category) {
         Optional<Category> optionalCategory = categoryRepository.findById(id);
         if (optionalCategory.isPresent()) {
             Category actualCategory = optionalCategory.get();
@@ -46,6 +47,7 @@ public class CategoryService {
         {
             throw new ApiRequestException("There is no category found with id " + id);
         }
+        return false;
     }
 
     public List<Category> getCategories(){

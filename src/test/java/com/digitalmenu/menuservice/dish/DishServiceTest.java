@@ -131,20 +131,13 @@ class DishServiceTest {
     @Test
     void removeDish() {
         // given
-        Dish dish = new Dish(
-                1,
-                "Pumpkin soup",
-                "Good Soup",
-                "soup"
-        );
-        dishRepository.save(dish);
+        int dishId = 42;
 
-        //when
-        underTest.removeDish(any());
-
+        given(dishRepository.existsById(dishId)).willReturn(true);
+        // when
         // then
-        dishRepository.deleteDishById(1);
-        verify(dishRepository.existsById(1)).equals(false);
+        underTest.removeDish(dishId);
+        verify(dishRepository).deleteById(dishId);
     }
 
     @Test

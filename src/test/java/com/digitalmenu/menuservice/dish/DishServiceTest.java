@@ -1,7 +1,8 @@
 package com.digitalmenu.menuservice.dish;
 
+import com.digitalmenu.menuservice.category.Category;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -9,6 +10,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -63,18 +67,60 @@ class DishServiceTest {
     }
 
     @Test
-    void willThrowWhenDishIsTaken() {
+    void willThrowWhenDishIsEmptyOnCreate() {
         // given
         Dish dish = new Dish(
                 1,
-                "Pumpkin soup",
+                "",
                 "Good Soup",
                 "soup"
         );
 
-        given(dishRepository.findDishByName(anyString()))
-                .willReturn(java.util.Optional.of(dish));
         // when
+        given(dishRepository.findDishByName(""))
+                .willReturn(java.util.Optional.of(dish));
+
+        // then
+        assertThatThrownBy(() -> underTest.createDish(dish))
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessageContaining("Name is empty!");
+        verify(dishRepository, never()).save(any());
+    }
+
+    @Test
+    void willThrowWhenDishIsEmptyOnUpdate() {
+        // given
+        Dish dish = new Dish(
+                1,
+                "Pumpkin Soup",
+                "Good Soup",
+                "soup"
+        );
+
+        // when
+        given(dishRepository.findById(dish.getId()))
+                .willReturn(Optional.empty());
+
+        // then
+        assertThatThrownBy(() -> underTest.updateDish(dish.getId(), dish))
+                .isInstanceOf(EntityExistsException.class)
+                .hasMessageContaining("Dish does not exist with given id");
+        verify(dishRepository, never()).save(any());
+    }
+
+    @Test
+    void willThrowWhenDishIsTakenOnCreate() {
+        // given
+        Dish dish = new Dish(
+                1,
+                "Pumpkin Soup",
+                "Good Soup",
+                "soup"
+        );
+
+        // when
+        given(dishRepository.findDishByName("Pumpkin Soup"))
+                .willReturn(java.util.Optional.of(dish));
         // then
         assertThatThrownBy(() -> underTest.createDish(dish))
                 .isInstanceOf(EntityExistsException.class)
@@ -104,24 +150,25 @@ class DishServiceTest {
     @Test
     void updateDish() {
         // given
-        Dish dish = new Dish(
+        Dish oldDish = new Dish(
                 1,
-                "Pumpkin soup",
-                "Good soup",
-                "Soup"
+                "Pumpkin-soup",
+                "Good Soup",
+                "soup"
         );
-        dishRepository.save(dish);
-
-        //when
         Dish newDish = new Dish(
                 1,
-                "Pumpkin soup",
-                "Bad soup",
-                "Soup"
+                "Cheese-soup",
+                "Good Soup",
+                "soup"
         );
-        underTest.updateDish(1, newDish);
+
+        given(dishRepository.findById(oldDish.getId()))
+                .willReturn(java.util.Optional.of(oldDish));
+        //when
+        underTest.updateDish(oldDish.getId(), newDish);
 
         // then
-        assertThat(underTest.getDishByName("Pumpkin soup")).isNotEqualTo(dish);
+        assertThat(underTest.getDishByName(newDish.getName())).isNotEqualTo(oldDish);
     }
 }

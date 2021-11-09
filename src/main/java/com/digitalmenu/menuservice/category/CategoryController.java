@@ -50,10 +50,8 @@ public class CategoryController {
 
     @PutMapping(path = "/{categoryId}")
     public ResponseEntity<Category> updateCategory(@RequestBody Category category, @PathVariable("categoryId") Integer categoryId) {
-        boolean success = categoryService.updateCategory(categoryId, category);
-        if (success)
-            return new ResponseEntity<>(category, HttpStatus.OK);
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        categoryService.updateCategory(categoryId, category);
+        return new ResponseEntity<>(category, HttpStatus.OK);
     }
 
     @DeleteMapping(path = "/{categoryId}")

@@ -1,46 +1,60 @@
 package com.digitalmenu.menuservice.category;
-import com.digitalmenu.menuservice.dish.Dish;
+import com.digitalmenu.menuservice.exception.ApiRequestException;
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.mock.mockito.MockBean;
+
 import javax.persistence.EntityExistsException;
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class CategoryServiceUnitTest {
+
     @Mock
     private CategoryRepository categoryRepository ;
+
+    @InjectMocks
     private CategoryService underTest;
 
-    @BeforeEach
-    void setUp() {
+    @Before
+    public void setUp() {
         underTest = new CategoryService(categoryRepository);
     }
 
     @Test
     void CanDeleteCategory() {
         // given
-        underTest.deleteCategory(1);
+        int categoryId = 42;
+
+        given(categoryRepository.existsById(categoryId)).willReturn(true);
         // when
         // then
+        underTest.deleteCategory(categoryId);
+        verify(categoryRepository).deleteById(categoryId);
     }
 
     @Test
     void CantDeleteCategoryBecauseIdDoesNotExist()
     {
         // given
-        underTest.deleteCategory(99);
-        // when
-        // then
+        int categoryId = 42;
+        assertThatThrownBy(() -> underTest.deleteCategory(categoryId))
+                .isInstanceOf(ApiRequestException.class)
+                .hasMessageContaining("Category with id "+ categoryId +" does not exists");
     }
 
     @Test

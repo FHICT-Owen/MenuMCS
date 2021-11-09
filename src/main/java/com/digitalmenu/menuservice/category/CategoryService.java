@@ -19,8 +19,7 @@ public class CategoryService {
     }
 
     public void deleteCategory(Integer categoryId) {
-        boolean exists = categoryRepository.existsById(categoryId);
-        if (!exists) {
+        if (!categoryRepository.existsById(categoryId)) {
             throw new ApiRequestException("Category with id " + categoryId + " does not exists");
         }
         else {

@@ -36,6 +36,11 @@ public class Dish {
         this.name = name;
     }
 
+    public Dish(Integer id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public Dish(Integer id, String name, String description, String category) {
         this.id = id;
         this.name = name;

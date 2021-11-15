@@ -40,7 +40,7 @@ public class DishController {
         dishService.removeDish(id);
     }
 
-    @PutMapping("/{dishId}")
+    @PutMapping(path = "/{dishId}")
     public ResponseEntity<Dish> updateDish(@RequestBody Dish dish, @PathVariable("dishId") Integer dishId) {
         boolean success = dishService.updateDish(dishId, dish);
         if (success)

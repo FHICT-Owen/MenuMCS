@@ -101,27 +101,6 @@ public class CategoryServiceUnitTest {
     }
 
     @Test
-    @Disabled
-    void updateCategory() {
-        // given
-        Category category = new Category(
-                1,
-                "meat"
-        );
-        categoryRepository.save(category);
-
-        //when
-        Category newCategory = new Category(
-                1,
-                "vegetables"
-        );
-        underTest.updateCategory(1, newCategory);
-
-        // then
-        assertThat(underTest.getCategoryByName("vegetables")).isNotEqualTo(category);
-    }
-
-    @Test
     void willThrowWhenCategoryIsTakenOnCreate() {
         // given
         Category category = new Category(
@@ -137,6 +116,46 @@ public class CategoryServiceUnitTest {
                 .isInstanceOf(EntityExistsException.class)
                 .hasMessageContaining("Name already taken!");
         verify(categoryRepository, never()).save(any());
+    }
+
+    @Test
+    void updateCategory() {
+        // given
+        Category expected = new Category(
+                1,
+                "meat"
+        );
+
+        given(categoryRepository.findById(expected.getId())).willReturn(Optional.of(expected));
+
+        //when
+        underTest.updateCategory(expected.getId(), expected);
+        ArgumentCaptor<Category> dishArgumentCaptor =
+                ArgumentCaptor.forClass(Category.class);
+        verify(categoryRepository)
+                .save(dishArgumentCaptor.capture());
+
+        Category actual = dishArgumentCaptor.getValue();
+
+        // then
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    void willThrowWhenCategoryIsNotFoundOnUpdate() {
+        // given
+        int categoryId = 1;
+        Category expected = new Category(
+                categoryId,
+                "Meat Lovers"
+        );
+
+        given(categoryRepository.findById(expected.getId())).willReturn(Optional.empty());
+
+        // then
+        assertThatThrownBy(() -> underTest.updateCategory(expected.getId(), expected))
+                .isInstanceOf(ApiRequestException.class)
+                .hasMessageContaining("There is no category found with id " + categoryId);
     }
 
     @Test

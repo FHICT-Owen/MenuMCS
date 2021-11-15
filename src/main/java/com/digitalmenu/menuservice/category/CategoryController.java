@@ -27,14 +27,7 @@ public class CategoryController {
     @GetMapping
     public List<Category> getCategories()
     {
-        try
-        {
-            return categoryService.getCategories();
-        }
-        catch (Exception ex)
-        {
-            throw new ApiRequestException("Can't retrieve categories");
-        }
+        return categoryService.getCategories();
     }
 
     @PostMapping

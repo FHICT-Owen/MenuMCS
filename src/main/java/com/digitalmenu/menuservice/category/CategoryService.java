@@ -36,7 +36,7 @@ public class CategoryService {
         categoryRepository.save(category);
     }
 
-    public boolean updateCategory(Integer id, Category category) {
+    public void updateCategory(Integer id, Category category) {
         Optional<Category> optionalCategory = categoryRepository.findById(id);
         if (optionalCategory.isPresent()) {
             Category actualCategory = optionalCategory.get();
@@ -47,7 +47,6 @@ public class CategoryService {
         {
             throw new ApiRequestException("There is no category found with id " + id);
         }
-        return false;
     }
 
     public List<Category> getCategories(){

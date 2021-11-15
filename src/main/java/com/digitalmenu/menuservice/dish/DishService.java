@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityExistsException;
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,6 +62,12 @@ public class DishService {
     }
 
     public Optional<Dish> getDishByName(String name){
-        return dishRepository.findDishByName(name);
+        if (name.isEmpty())
+        {
+            throw new ApiRequestException("There are no dishes found with this name");
+        }
+        else {
+            return dishRepository.findDishByName(name);
+        }
     }
 }

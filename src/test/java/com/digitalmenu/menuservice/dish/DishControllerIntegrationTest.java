@@ -1,6 +1,7 @@
 package com.digitalmenu.menuservice.dish;
 
 import com.digitalmenu.menuservice.dish.DishService;
+import com.digitalmenu.menuservice.exception.ApiRequestException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Disabled;
@@ -14,6 +15,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -60,6 +63,18 @@ public class DishControllerIntegrationTest {
             .contentType(MediaType.APPLICATION_JSON)
             .content(convertObjectToJsonString(dish)))
             .andDo(print()).andExpect(status().isOk());
+    }
+
+    @Test
+    public void shouldReturnExceptionMessageWhenDishNameNotFound() throws Exception {
+        String name = "soup";
+
+        when(dishService.getDishByName(name)).thenThrow(new ApiRequestException("There are no dishes found with this name"));
+
+        mockMvc.perform(get("/api/v1/dish/{dishName}", name))
+                .andDo(print()).andExpect(status().is4xxClientError())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof ApiRequestException))
+                .andExpect(result -> assertEquals("There are no dishes found with this name", result.getResolvedException().getMessage()));
     }
 
     private String convertObjectToJsonString(Dish dish) {

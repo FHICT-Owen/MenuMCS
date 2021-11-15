@@ -1,4 +1,5 @@
 package com.digitalmenu.menuservice.dish;
+import com.digitalmenu.menuservice.category.Category;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -32,7 +33,7 @@ class DishServiceTest {
     }
 
     @Test
-    void canGetDishes() {
+    void shouldGetDishes() {
         // when
         underTest.getDishes();
         // then
@@ -40,7 +41,7 @@ class DishServiceTest {
     }
 
     @Test
-    void canCreateDish() {
+    void shouldCreateDish() {
         // given
         Dish expected = new Dish(
                 1,
@@ -51,6 +52,41 @@ class DishServiceTest {
         // when
         underTest.createDish(expected);
 
+        ArgumentCaptor<Dish> dishArgumentCaptor =
+                ArgumentCaptor.forClass(Dish.class);
+        verify(dishRepository)
+                .save(dishArgumentCaptor.capture());
+
+        Dish actual = dishArgumentCaptor.getValue();
+
+        // then
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    void shouldRemoveDish() {
+        // given
+        int dishId = 42;
+
+        given(dishRepository.existsById(dishId)).willReturn(true);
+        // when
+        // then
+        underTest.removeDish(dishId);
+        verify(dishRepository).deleteById(dishId);
+    }
+
+    @Test
+    void shouldUpdateCategory() {
+        // given
+        Dish expected = new Dish(
+                1,
+                "sou"
+        );
+
+        given(dishRepository.findById(expected.getId())).willReturn(Optional.of(expected));
+
+        //when
+        underTest.updateDish(expected.getId(), expected);
         ArgumentCaptor<Dish> dishArgumentCaptor =
                 ArgumentCaptor.forClass(Dish.class);
         verify(dishRepository)
@@ -123,43 +159,5 @@ class DishServiceTest {
                 .isInstanceOf(EntityExistsException.class)
                 .hasMessageContaining("Name already taken!");
         verify(dishRepository, never()).save(any());
-    }
-
-    @Test
-    void removeDish() {
-        // given
-        int dishId = 42;
-
-        given(dishRepository.existsById(dishId)).willReturn(true);
-        // when
-        // then
-        underTest.removeDish(dishId);
-        verify(dishRepository).deleteById(dishId);
-    }
-
-    @Disabled
-    @Test
-    void updateDish() {
-        // given
-        Dish oldDish = new Dish(
-                1,
-                "Pumpkin-soup",
-                "Good Soup",
-                "soup"
-        );
-        Dish newDish = new Dish(
-                1,
-                "Cheese-soup",
-                "Good Soup",
-                "soup"
-        );
-
-        given(dishRepository.findById(oldDish.getId()))
-                .willReturn(java.util.Optional.of(oldDish));
-        //when
-        underTest.updateDish(oldDish.getId(), newDish);
-
-        // then
-        assertThat(underTest.getDishByName(newDish.getName())).isNotEqualTo(oldDish);
     }
 }

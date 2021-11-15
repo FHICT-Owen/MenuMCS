@@ -1,10 +1,8 @@
 package com.digitalmenu.menuservice.dish;
 
-import com.digitalmenu.menuservice.dish.DishService;
 import com.digitalmenu.menuservice.exception.ApiRequestException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -26,11 +24,25 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(DishController.class)
 public class DishControllerIntegrationTest {
+    @Autowired
+    private MockMvc mockMvc;
+
     @MockBean
     DishService dishService;
 
-    @Autowired
-    private MockMvc mockMvc;
+    @Test
+    void shouldReturnDishes() throws Exception {
+        Dish dish1 = new Dish(1, "soup");
+        Dish dish2 = new Dish(2, "frikandel");
+        List<Dish> dishList = new ArrayList<>();
+        dishList.add(dish1);
+        dishList.add(dish2);
+
+        when(dishService.getDishes()).thenReturn(dishList);
+
+        mockMvc.perform(get("/api/v1/dish"))
+                .andDo(print()).andExpect(status().isOk()).andExpect(content().json(convertObjectToJsonString(dishList)));
+    }
 
     @Test
     public void shouldGetDishByName() throws Exception {
@@ -53,16 +65,21 @@ public class DishControllerIntegrationTest {
                 .andExpect(status().isOk());
     }
 
-    @Disabled
     @Test
     void shouldUpdateDish() throws Exception {
-        int dishId = 0;
+        int dishId = 1;
         Dish dish = new Dish(dishId, "soup");
 
         mockMvc.perform(put("/api/v1/dish/{dishId}", dishId)
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(convertObjectToJsonString(dish)))
-            .andDo(print()).andExpect(status().isOk());
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(convertObjectToJsonString(dish)))
+                .andDo(print()).andExpect(status().isOk());
+    }
+
+    @Test
+    void shouldDeleteDish() throws Exception {
+        mockMvc.perform(delete("/api/v1/dish/{dishId}", 1))
+                .andDo(print()).andExpect(status().isOk());
     }
 
     @Test
@@ -75,6 +92,16 @@ public class DishControllerIntegrationTest {
                 .andDo(print()).andExpect(status().is4xxClientError())
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof ApiRequestException))
                 .andExpect(result -> assertEquals("There are no dishes found with this name", result.getResolvedException().getMessage()));
+    }
+
+    private String convertObjectToJsonString(List<Dish> dishList) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.writeValueAsString(dishList);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            throw new RuntimeException();
+        }
     }
 
     private String convertObjectToJsonString(Dish dish) {

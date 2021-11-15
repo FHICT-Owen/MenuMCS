@@ -1,6 +1,5 @@
 package com.digitalmenu.menuservice.dish;
 
-import com.digitalmenu.menuservice.category.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,9 +41,11 @@ public class DishController {
 
     @PutMapping(path = "/{dishId}")
     public ResponseEntity<Dish> updateDish(@RequestBody Dish dish, @PathVariable("dishId") Integer dishId) {
-        boolean success = dishService.updateDish(dishId, dish);
-        if (success)
-            return new ResponseEntity<>(dish, HttpStatus.OK);
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        dishService.updateDish(dishId, dish);
+        return new ResponseEntity<>(dish, HttpStatus.OK);
+//        boolean success = dishService.updateDish(dishId, dish);
+//        if (success)
+//            return new ResponseEntity<>(dish, HttpStatus.OK);
+//        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

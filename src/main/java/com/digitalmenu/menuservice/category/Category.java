@@ -1,9 +1,16 @@
 package com.digitalmenu.menuservice.category;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
 @Entity
 @Table
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Category {
     @Id
     @SequenceGenerator(
@@ -17,32 +24,4 @@ public class Category {
     )
     private Integer id;
     private String name;
-
-    public Category() {
-    }
-
-    public Category(Integer id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    public Category(String name) {
-        this.name = name;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }

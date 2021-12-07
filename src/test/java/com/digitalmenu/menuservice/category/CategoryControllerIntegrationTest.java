@@ -33,8 +33,8 @@ class CategoryControllerIntegrationTest {
 
     @Test
     void shouldReturnCategories() throws Exception {
-        Category category1 = new Category(1, "Meat Lovers");
-        Category category2 = new Category(2, "Soups");
+        Category category1 = new Category(1, "Meat Lovers", "Meat Lovers");
+        Category category2 = new Category(2, "Soups", "Soepen");
         List<Category> categoryList = new ArrayList<>();
         categoryList.add(category1);
         categoryList.add(category2);
@@ -48,7 +48,7 @@ class CategoryControllerIntegrationTest {
     @Test
     void shouldGetCategoryByName() throws Exception {
         String categoryName = "Meat Lovers";
-        Category category = new Category(1, categoryName);
+        Category category = new Category(1, categoryName, categoryName);
 
         when(categoryService.getCategoryByName(categoryName)).thenReturn(java.util.Optional.of(category));
 
@@ -58,7 +58,7 @@ class CategoryControllerIntegrationTest {
 
     @Test
     void shouldCreateCategory() throws Exception {
-        Category category = new Category(1, "Meat Lovers");
+        Category category = new Category(1, "Meat Lovers", "Meat Lovers");
 
         mockMvc.perform(post("/api/v1/categories")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -69,7 +69,7 @@ class CategoryControllerIntegrationTest {
     @Test
     void shouldUpdateCategory() throws Exception {
         int categoryId = 1;
-        Category category = new Category(categoryId, "Deserts");
+        Category category = new Category(categoryId, "Deserts", "Toetjes");
 
         mockMvc.perform(put("/api/v1/categories/{categoryId}", categoryId)
                         .contentType(MediaType.APPLICATION_JSON)

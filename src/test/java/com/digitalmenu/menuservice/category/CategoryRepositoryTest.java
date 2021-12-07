@@ -35,7 +35,8 @@ class CategoryRepositoryTest {
         // given
         Category category = new Category(
                 1,
-                "meat"
+                "meat",
+                "vlees"
         );
         underTest.save(category);
         String name = "meat";

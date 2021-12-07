@@ -39,7 +39,8 @@ public class CategoryServiceTest {
         // given
         Category expected = new Category(
                 1,
-                "Meat"
+                "Meat",
+                "vlees"
         );
 
         // when
@@ -61,14 +62,16 @@ public class CategoryServiceTest {
         // given
         Category category = new Category(
                 1,
-                "meat"
+                "meat",
+                "vlees"
         );
         categoryRepository.save(category);
 
         //when
         Category newCategory = new Category(
                 1,
-                "vegetables"
+                "vegetables",
+                "groente"
         );
         underTest.updateCategory(1, newCategory);
 
@@ -81,7 +84,8 @@ public class CategoryServiceTest {
         // given
         Category category = new Category(
                 1,
-                "Meat"
+                "Meat",
+                "vlees"
         );
 
         given(categoryRepository.findCategoryByName(anyString()))

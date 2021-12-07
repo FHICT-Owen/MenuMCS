@@ -43,11 +43,13 @@ class CategoryControllerIntegrationTest {
     {
         Category category1 = new Category(
                 1,
-                "meat"
+                "meat",
+                "vlees"
         );
         Category category2 = new Category(
                 2,
-                "fish"
+                "fish",
+                "vis"
         );
         categories.add(category1);
         categories.add(category2);

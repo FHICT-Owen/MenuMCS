@@ -42,4 +42,13 @@ public class Dish {
         this.description = description;
         this.category = category;
     }
+
+    public Dish(Integer id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public Dish(String name) {
+        this.name = name;
+    }
 }

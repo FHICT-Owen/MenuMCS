@@ -1,9 +1,11 @@
 package com.digitalmenu.menuservice.category;
 
+import com.digitalmenu.menuservice.exception.ApiRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,12 +20,12 @@ public class CategoryService {
     }
 
     public void deleteCategory(Integer categoryId) {
-        boolean exists = categoryRepository.existsById(categoryId);
-        if (!exists) {
-            throw new IllegalStateException("Category with id " + categoryId + " does not exists");
+        if (!categoryRepository.existsById(categoryId)) {
+            throw new ApiRequestException("Category with id " + categoryId + " does not exists");
         }
-        categoryRepository.deleteById(categoryId);
-        System.out.println("category " + categoryId + " deleted!");
+        else {
+            categoryRepository.deleteById(categoryId);
+        }
     }
 
     public void createCategory(Category category) {
@@ -34,21 +36,37 @@ public class CategoryService {
         categoryRepository.save(category);
     }
 
-    public boolean updateCategory(Integer id, Category category) {
+    public void updateCategory(Integer id, Category category) {
         Optional<Category> optionalCategory = categoryRepository.findById(id);
         if (optionalCategory.isPresent()) {
             Category actualCategory = optionalCategory.get();
             actualCategory.setName(category.getName());
             categoryRepository.save(actualCategory);
-            return true;
         }
-        return false;
+        else
+        {
+            throw new ApiRequestException("There is no category found with id " + id);
+        }
     }
 
     public List<Category> getCategories(){
-        return categoryRepository.findAll();
+        if (categoryRepository.count() == 0)
+        {
+            throw new ApiRequestException("There are no categories found");
+        }
+        else {
+            return categoryRepository.findAll();
+        }
     }
 
-    public Optional<Category> getCategoryByName(String name) {return categoryRepository.findCategoryByName(name);}
-
+    public Optional<Category> getCategoryByName(String name) {
+        Optional<Category> category = categoryRepository.findCategoryByName(name);
+        if (category.isPresent())
+        {
+            return category;
+        }
+        else {
+            throw new ApiRequestException("There is no category found with name " + name);
+        }
+    }
 }

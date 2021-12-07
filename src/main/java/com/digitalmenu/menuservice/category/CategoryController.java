@@ -1,5 +1,7 @@
 package com.digitalmenu.menuservice.category;
 
+import com.digitalmenu.menuservice.exception.ApiException;
+import com.digitalmenu.menuservice.exception.ApiRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,15 +31,19 @@ public class CategoryController {
 
     @PostMapping
     public void createCategory(@RequestBody Category category){
-        categoryService.createCategory(category);
+        try {
+            categoryService.createCategory(category);
+        }
+        catch (Exception ex)
+        {
+            throw new ApiRequestException("Can't add category");
+        }
     }
 
     @PutMapping(path = "/{categoryId}")
     public ResponseEntity<Category> updateCategory(@RequestBody Category category, @PathVariable("categoryId") Integer categoryId) {
-        boolean success = categoryService.updateCategory(categoryId, category);
-        if (success)
-            return new ResponseEntity<>(category, HttpStatus.OK);
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        categoryService.updateCategory(categoryId, category);
+        return new ResponseEntity<>(category, HttpStatus.OK);
     }
 
     @DeleteMapping(path = "/{categoryId}")

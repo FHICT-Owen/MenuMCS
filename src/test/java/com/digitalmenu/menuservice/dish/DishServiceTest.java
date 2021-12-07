@@ -1,5 +1,5 @@
 package com.digitalmenu.menuservice.dish;
-
+import com.digitalmenu.menuservice.category.Category;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -9,14 +9,16 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+
 
 @ExtendWith(MockitoExtension.class)
 class DishServiceTest {
@@ -31,7 +33,7 @@ class DishServiceTest {
     }
 
     @Test
-    void canGetDishes() {
+    void shouldGetDishes() {
         // when
         underTest.getDishes();
         // then
@@ -39,89 +41,123 @@ class DishServiceTest {
     }
 
     @Test
-    void canCreateDish() {
+    void shouldCreateDish() {
         // given
-        Dish dish = new Dish(
-                5,
-                "Pumpkin soup",
+        Dish expected = new Dish(
+                1,
+                "",
                 "Good Soup",
                 "soup"
         );
-
         // when
-        underTest.createDish(dish);
+        underTest.createDish(expected);
 
-        // then
         ArgumentCaptor<Dish> dishArgumentCaptor =
                 ArgumentCaptor.forClass(Dish.class);
         verify(dishRepository)
                 .save(dishArgumentCaptor.capture());
 
-        Dish capturedDish = dishArgumentCaptor.getValue();
+        Dish actual = dishArgumentCaptor.getValue();
 
-        assertThat(capturedDish).isEqualTo(dish);
+        // then
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
-    void willThrowWhenDishIsTaken() {
+    void shouldRemoveDish() {
+        // given
+        int dishId = 42;
+
+        given(dishRepository.existsById(dishId)).willReturn(true);
+        // when
+        // then
+        underTest.removeDish(dishId);
+        verify(dishRepository).deleteById(dishId);
+    }
+
+    @Test
+    void shouldUpdateCategory() {
+        // given
+        Dish expected = new Dish(
+                1,
+                "sou"
+        );
+
+        given(dishRepository.findById(expected.getId())).willReturn(Optional.of(expected));
+
+        //when
+        underTest.updateDish(expected.getId(), expected);
+        ArgumentCaptor<Dish> dishArgumentCaptor =
+                ArgumentCaptor.forClass(Dish.class);
+        verify(dishRepository)
+                .save(dishArgumentCaptor.capture());
+
+        Dish actual = dishArgumentCaptor.getValue();
+
+        // then
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Disabled //Exception EntityNotFoundException has been removed service
+    @Test
+    void willThrowWhenDishIsEmptyOnCreate() {
         // given
         Dish dish = new Dish(
                 1,
-                "Pumpkin soup",
+                "",
                 "Good Soup",
                 "soup"
         );
 
-        given(dishRepository.findDishByName(anyString()))
-                .willReturn(java.util.Optional.of(dish));
         // when
+        given(dishRepository.findDishByName(""))
+                .willReturn(java.util.Optional.of(dish));
+
+        // then
+        assertThatThrownBy(() -> underTest.createDish(dish))
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessageContaining("Name is empty!");
+        verify(dishRepository, never()).save(any());
+    }
+
+    @Test
+    void willThrowWhenDishIsEmptyOnUpdate() {
+        // given
+        Dish dish = new Dish(
+                1,
+                "Pumpkin Soup",
+                "Good Soup",
+                "soup"
+        );
+
+        // when
+        given(dishRepository.findById(dish.getId()))
+                .willReturn(Optional.empty());
+
+        // then
+        assertThatThrownBy(() -> underTest.updateDish(dish.getId(), dish))
+                .isInstanceOf(EntityExistsException.class)
+                .hasMessageContaining("Dish does not exist with given id");
+        verify(dishRepository, never()).save(any());
+    }
+
+    @Test
+    void willThrowWhenDishIsTakenOnCreate() {
+        // given
+        Dish dish = new Dish(
+                1,
+                "Pumpkin Soup",
+                "Good Soup",
+                "soup"
+        );
+
+        // when
+        given(dishRepository.findDishByName("Pumpkin Soup"))
+                .willReturn(java.util.Optional.of(dish));
         // then
         assertThatThrownBy(() -> underTest.createDish(dish))
                 .isInstanceOf(EntityExistsException.class)
                 .hasMessageContaining("Name already taken!");
         verify(dishRepository, never()).save(any());
-    }
-
-    @Test
-    void removeDish() {
-        // given
-        Dish dish = new Dish(
-                1,
-                "Pumpkin soup",
-                "Good Soup",
-                "soup"
-        );
-        dishRepository.save(dish);
-
-        //when
-        underTest.removeDish(any());
-
-        // then
-        dishRepository.deleteDishById(1);
-        verify(dishRepository.existsById(1)).equals(false);
-    }
-
-    @Test
-    void updateDish() {
-        // given
-        Dish dish = new Dish(
-                1,
-                "Pumpkin soup",
-                "Good soup",
-                "Soup"
-        );
-        dishRepository.save(dish);
-
-        //when
-        Dish newDish = new Dish(
-                1,
-                "Pumpkin soup",
-                "Bad soup",
-                "Soup"
-        );
-        underTest.updateDish(1, newDish);
-
-        // then
-        assertThat(underTest.getDishByName("Pumpkin soup")).isNotEqualTo(dish);
     }
 }

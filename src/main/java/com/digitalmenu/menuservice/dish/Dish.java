@@ -26,7 +26,9 @@ public class Dish {
     )
     private Integer id;
     private String name;
+    private String name_NL;
     private String description;
+    private String description_NL;
     private String category;
     @ElementCollection
     private Set<String> dietaryRestrictions;

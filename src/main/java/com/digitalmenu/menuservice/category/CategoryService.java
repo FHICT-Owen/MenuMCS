@@ -41,6 +41,7 @@ public class CategoryService {
         if (optionalCategory.isPresent()) {
             Category actualCategory = optionalCategory.get();
             actualCategory.setName(category.getName());
+            actualCategory.setName_NL(category.getName_NL());
             categoryRepository.save(actualCategory);
         }
         else

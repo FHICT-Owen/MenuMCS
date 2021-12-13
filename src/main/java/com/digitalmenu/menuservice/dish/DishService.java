@@ -47,7 +47,9 @@ public class DishService {
         if (oldDishById.isPresent()) {
             Dish newDish = oldDishById.get();
             newDish.setName(dish.getName());
+            newDish.setName_NL(dish.getName_NL());
             newDish.setDescription(dish.getDescription());
+            newDish.setDescription_NL(dish.getDescription_NL());
             newDish.setCategory(dish.getCategory());
             newDish.setDietaryRestrictions(dish.getDietaryRestrictions());
             newDish.setIngredients(dish.getIngredients());

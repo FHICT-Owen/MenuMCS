@@ -3,6 +3,7 @@ package com.digitalmenu.menuservice.dish;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,16 +30,19 @@ public class DishController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('create:dishes')")
     public void addNewDish(@RequestBody Dish dish) {
         dishService.createDish(dish);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('delete:dishes')")
     public void deleteDish(@PathVariable Integer id) {
         dishService.removeDish(id);
     }
 
     @PutMapping(path = "/{dishId}")
+    @PreAuthorize("hasAuthority('update:dishes')")
     public ResponseEntity<Dish> updateDish(@RequestBody Dish dish, @PathVariable("dishId") Integer dishId) {
         dishService.updateDish(dishId, dish);
         return new ResponseEntity<>(dish, HttpStatus.OK);

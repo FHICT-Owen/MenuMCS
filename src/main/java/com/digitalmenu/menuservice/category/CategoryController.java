@@ -5,6 +5,7 @@ import com.digitalmenu.menuservice.exception.ApiRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +31,7 @@ public class CategoryController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('create:categories')")
     public void createCategory(@RequestBody Category category){
         try {
             categoryService.createCategory(category);
@@ -41,12 +43,14 @@ public class CategoryController {
     }
 
     @PutMapping(path = "/{categoryId}")
+    @PreAuthorize("hasAuthority('update:categories')")
     public ResponseEntity<Category> updateCategory(@RequestBody Category category, @PathVariable("categoryId") Integer categoryId) {
         categoryService.updateCategory(categoryId, category);
         return new ResponseEntity<>(category, HttpStatus.OK);
     }
 
     @DeleteMapping(path = "/{categoryId}")
+    @PreAuthorize("hasAuthority('delete:categories')")
     public void deleteCategory(@PathVariable("categoryId") Integer categoryId) {
         categoryService.deleteCategory(categoryId);
     }

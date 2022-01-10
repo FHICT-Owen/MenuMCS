@@ -1,5 +1,5 @@
 package com.digitalmenu.menuservice.dish;
-import com.digitalmenu.menuservice.category.Category;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -71,7 +71,7 @@ class DishServiceTest {
         given(dishRepository.existsById(dishId)).willReturn(true);
         // when
         // then
-        underTest.removeDish(dishId);
+        underTest.deleteDish(dishId);
         verify(dishRepository).deleteById(dishId);
     }
 
@@ -86,7 +86,7 @@ class DishServiceTest {
         given(dishRepository.findById(expected.getId())).willReturn(Optional.of(expected));
 
         //when
-        underTest.updateDish(expected.getId(), expected);
+        underTest.updateDish(expected);
         ArgumentCaptor<Dish> dishArgumentCaptor =
                 ArgumentCaptor.forClass(Dish.class);
         verify(dishRepository)
@@ -111,7 +111,7 @@ class DishServiceTest {
 
         // when
         given(dishRepository.findDishByName(""))
-                .willReturn(java.util.Optional.of(dish));
+                .willReturn(Optional.of(dish));
 
         // then
         assertThatThrownBy(() -> underTest.createDish(dish))
@@ -135,7 +135,7 @@ class DishServiceTest {
                 .willReturn(Optional.empty());
 
         // then
-        assertThatThrownBy(() -> underTest.updateDish(dish.getId(), dish))
+        assertThatThrownBy(() -> underTest.updateDish(dish))
                 .isInstanceOf(EntityExistsException.class)
                 .hasMessageContaining("Dish does not exist with given id");
         verify(dishRepository, never()).save(any());
@@ -153,7 +153,7 @@ class DishServiceTest {
 
         // when
         given(dishRepository.findDishByName("Pumpkin Soup"))
-                .willReturn(java.util.Optional.of(dish));
+                .willReturn(Optional.of(dish));
         // then
         assertThatThrownBy(() -> underTest.createDish(dish))
                 .isInstanceOf(EntityExistsException.class)

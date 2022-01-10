@@ -1,57 +1,41 @@
 package com.digitalmenu.menuservice.category;
 
-import com.digitalmenu.menuservice.exception.ApiException;
-import com.digitalmenu.menuservice.exception.ApiRequestException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping(path = "api/v1/categories")
+@AllArgsConstructor
+@RequestMapping("api/v1/category")
 public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @Autowired
-    public CategoryController(CategoryService categoryService) {
-        this.categoryService = categoryService;
-    }
-
-    @GetMapping("/{categoryName}")
-    public Optional<Category> getCategoryByName(@PathVariable("categoryName") String categoryName) { return categoryService.getCategoryByName(categoryName);}
-
     @GetMapping
-    public List<Category> getCategories()
-    {
+    public List<Category> getCategories() {
         return categoryService.getCategories();
     }
 
     @PostMapping
     @PreAuthorize("hasAuthority('create:categories')")
-    public void createCategory(@RequestBody Category category){
-        try {
-            categoryService.createCategory(category);
-        }
-        catch (Exception ex)
-        {
-            throw new ApiRequestException("Can't add category");
-        }
+    public ResponseEntity<Category> createCategory(@RequestBody @Valid Category category) {
+        return new ResponseEntity<>(categoryService.createCategory(category), HttpStatus.CREATED);
     }
 
-    @PutMapping(path = "/{categoryId}")
+    @PutMapping
     @PreAuthorize("hasAuthority('update:categories')")
-    public ResponseEntity<Category> updateCategory(@RequestBody Category category, @PathVariable("categoryId") Integer categoryId) {
-        categoryService.updateCategory(categoryId, category);
-        return new ResponseEntity<>(category, HttpStatus.OK);
+    public ResponseEntity<Category> updateCategory(@RequestBody @Valid Category category) {
+        return new ResponseEntity<>(categoryService.updateCategory(category), HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping(path = "/{categoryId}")
     @PreAuthorize("hasAuthority('delete:categories')")
     public void deleteCategory(@PathVariable("categoryId") Integer categoryId) {
         categoryService.deleteCategory(categoryId);
-    }
+    }batchet
 }

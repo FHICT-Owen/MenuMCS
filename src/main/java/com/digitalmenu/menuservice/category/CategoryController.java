@@ -37,5 +37,5 @@ public class CategoryController {
     @PreAuthorize("hasAuthority('delete:categories')")
     public void deleteCategory(@PathVariable("categoryId") Integer categoryId) {
         categoryService.deleteCategory(categoryId);
-    }batchet
+    }
 }

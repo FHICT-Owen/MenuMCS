@@ -1,50 +1,37 @@
 package com.digitalmenu.menuservice.dish;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping("api/v1/dish")
 public class DishController {
 
     private final DishService dishService;
 
-    @Autowired
-    public DishController(DishService dishService) {
-        this.dishService = dishService;
-    }
-
-    @GetMapping("/{dishName}")
-    public Optional<Dish> getDishByName(@PathVariable("dishName") String dishName) { return dishService.getDishByName(dishName);}
-
     @GetMapping
-    public List<Dish> getDishes()
-    {
+    public List<Dish> getCategories() {
         return dishService.getDishes();
     }
 
     @PostMapping
-    public void addNewDish(@RequestBody Dish dish) {
-        dishService.createDish(dish);
+    public ResponseEntity<Dish> createDish(@RequestBody @Valid Dish dish) {
+        return new ResponseEntity<>(dishService.createDish(dish), HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteDish(@PathVariable Integer id) {
-        dishService.removeDish(id);
+    @PutMapping
+    public ResponseEntity<Dish> updateDish(@RequestBody @Valid Dish dish) {
+        return new ResponseEntity<>(dishService.updateDish(dish), HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping(path = "/{dishId}")
-    public ResponseEntity<Dish> updateDish(@RequestBody Dish dish, @PathVariable("dishId") Integer dishId) {
-        dishService.updateDish(dishId, dish);
-        return new ResponseEntity<>(dish, HttpStatus.OK);
-//        boolean success = dishService.updateDish(dishId, dish);
-//        if (success)
-//            return new ResponseEntity<>(dish, HttpStatus.OK);
-//        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    @DeleteMapping(path = "/{DishId}")
+    public void deleteDish(@PathVariable("DishId") Integer DishId) {
+        dishService.deleteDish(DishId);
     }
 }

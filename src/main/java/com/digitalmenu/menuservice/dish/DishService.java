@@ -1,75 +1,54 @@
 package com.digitalmenu.menuservice.dish;
 
-import com.digitalmenu.menuservice.exception.ApiRequestException;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.digitalmenu.menuservice.exception.ElementAlreadyExistsException;
+import com.digitalmenu.menuservice.exception.NoSuchElementFoundException;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityExistsException;
 import java.util.List;
-import java.util.Optional;
 
-@Transactional
 @Service
+@AllArgsConstructor
 public class DishService {
 
     private final DishRepository dishRepository;
-
-    @Autowired
-    public DishService(DishRepository dishRepository) {
-        this.dishRepository = dishRepository;
-    }
 
     public List<Dish> getDishes() {
         return dishRepository.findAll();
     }
 
-    public void createDish(Dish dish) {
-        Optional<Dish> dishByName = dishRepository.findDishByName(dish.getName());
-        if (dishByName.isPresent()) {
-            throw new EntityExistsException("Name already taken!");
-        }
+    public Dish createDish(Dish dish) {
+        System.out.println("WJDJAWIDAWJODJAWO");
 
-        dishRepository.save(dish);
+        if (dishRepository.existsDishByName(dish.getName()))
+            throw new ElementAlreadyExistsException("Dish with name: " + dish.getName() + " already exists");
+        System.out.println("YOOOOOOOOO");
+
+        return dishRepository.save(dish);
     }
 
-    public void removeDish(Integer dishId) {
-        if (!dishRepository.existsById(dishId)) {
-            throw new ApiRequestException("Category with id " + dishId + " does not exists");
-        }
-        else {
-            dishRepository.deleteById(dishId);
-        }
+    public Dish updateDish(Dish dish) {
+        var foundDish = dishRepository.findById(dish.getId())
+                .orElseThrow(() -> new NoSuchElementFoundException("Dish not found"));
+
+        foundDish.setName(dish.getName());
+        foundDish.setName_NL(dish.getName_NL());
+        foundDish.setDescription(dish.getDescription());
+        foundDish.setDescription_NL(dish.getDescription_NL());
+        foundDish.setCategory(dish.getCategory());
+        foundDish.setDietaryRestrictions(dish.getDietaryRestrictions());
+        foundDish.setIngredients(dish.getIngredients());
+        foundDish.setPrize(dish.getPrize());
+        foundDish.setImage(dish.getImage());
+
+        return dishRepository.save(foundDish);
     }
 
-    public boolean updateDish(Integer id, Dish dish) {
-        Optional<Dish> oldDishById = dishRepository.findById(id);
-        if (oldDishById.isPresent()) {
-            Dish newDish = oldDishById.get();
-            newDish.setName(dish.getName());
-            newDish.setName_NL(dish.getName_NL());
-            newDish.setDescription(dish.getDescription());
-            newDish.setDescription_NL(dish.getDescription_NL());
-            newDish.setCategory(dish.getCategory());
-            newDish.setDietaryRestrictions(dish.getDietaryRestrictions());
-            newDish.setIngredients(dish.getIngredients());
-            newDish.setPrize(dish.getPrize());
-            newDish.setImage(dish.getImage());
-            dishRepository.save(newDish);
-            return true;
-        }
-        else {
-            throw new EntityExistsException("Dish does not exist with given id");
-        }
-    }
+    public void deleteDish(Integer id) {
+        if (!dishRepository.existsById(id))
+            throw new NoSuchElementFoundException("Dish not found");
 
-    public Optional<Dish> getDishByName(String name){
-        if (name.isEmpty())
-        {
-            throw new ApiRequestException("There are no dishes found with this name");
-        }
-        else {
-            return dishRepository.findDishByName(name);
-        }
+        dishRepository.deleteById(id);
     }
 }

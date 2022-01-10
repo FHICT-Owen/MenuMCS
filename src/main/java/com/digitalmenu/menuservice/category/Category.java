@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table
@@ -23,6 +24,10 @@ public class Category {
             generator = "category_sequence"
     )
     private Integer id;
+    @NotBlank
+    @Column(nullable = false, unique = true)
     private String name;
+    @NotBlank
+    @Column(nullable = false, unique = true)
     private String name_NL;
 }

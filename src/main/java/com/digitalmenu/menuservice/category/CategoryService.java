@@ -1,73 +1,43 @@
 package com.digitalmenu.menuservice.category;
 
-import com.digitalmenu.menuservice.exception.ApiRequestException;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.digitalmenu.menuservice.exception.ElementAlreadyExistsException;
+import com.digitalmenu.menuservice.exception.NoSuchElementFoundException;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityExistsException;
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
-import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
 
-    @Autowired
-    public CategoryService(CategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
-    }
-
-    public void deleteCategory(Integer categoryId) {
-        if (!categoryRepository.existsById(categoryId)) {
-            throw new ApiRequestException("Category with id " + categoryId + " does not exists");
-        }
-        else {
-            categoryRepository.deleteById(categoryId);
-        }
-    }
-
-    public void createCategory(Category category) {
-        Optional<Category> categoryByName = categoryRepository.findCategoryByName(category.getName());
-        if (categoryByName.isPresent()) {
-            throw new EntityExistsException("Name already taken!");
-        }
-        categoryRepository.save(category);
-    }
-
-    public void updateCategory(Integer id, Category category) {
-        Optional<Category> optionalCategory = categoryRepository.findById(id);
-        if (optionalCategory.isPresent()) {
-            Category actualCategory = optionalCategory.get();
-            actualCategory.setName(category.getName());
-            actualCategory.setName_NL(category.getName_NL());
-            categoryRepository.save(actualCategory);
-        }
-        else
-        {
-            throw new ApiRequestException("There is no category found with id " + id);
-        }
-    }
-
     public List<Category> getCategories(){
-        if (categoryRepository.count() == 0)
-        {
-            throw new ApiRequestException("There are no categories found");
-        }
-        else {
-            return categoryRepository.findAll();
-        }
+        return categoryRepository.findAll();
     }
 
-    public Optional<Category> getCategoryByName(String name) {
-        Optional<Category> category = categoryRepository.findCategoryByName(name);
-        if (category.isPresent())
-        {
-            return category;
-        }
-        else {
-            throw new ApiRequestException("There is no category found with name " + name);
-        }
+    public Category createCategory(Category category) {
+
+        if (categoryRepository.existsCategoryByName(category.getName()))
+            throw new ElementAlreadyExistsException("Category with name: " + category.getName() + " already exists");
+
+        return categoryRepository.save(category);
+    }
+
+    public Category updateCategory(Category category) {
+        var foundCategory = categoryRepository.findById(category.getId())
+                .orElseThrow(() -> new NoSuchElementFoundException("Category not found"));
+        foundCategory.setName(category.getName());
+        foundCategory.setName_NL(category.getName_NL());
+        return categoryRepository.save(foundCategory);
+    }
+
+    public void deleteCategory(Integer id) {
+        if (!categoryRepository.existsById(id))
+            throw new NoSuchElementFoundException("Category not found");
+
+        categoryRepository.deleteById(id);
     }
 }

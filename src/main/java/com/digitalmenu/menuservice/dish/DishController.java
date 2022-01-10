@@ -3,6 +3,7 @@ package com.digitalmenu.menuservice.dish;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -21,6 +22,7 @@ public class DishController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('create:dishes')")
     public ResponseEntity<Dish> createDish(@RequestBody @Valid Dish dish) {
         return new ResponseEntity<>(dishService.createDish(dish), HttpStatus.CREATED);
     }
@@ -30,8 +32,9 @@ public class DishController {
         return new ResponseEntity<>(dishService.updateDish(dish), HttpStatus.NO_CONTENT);
     }
 
-    @DeleteMapping(path = "/{DishId}")
-    public void deleteDish(@PathVariable("DishId") Integer DishId) {
-        dishService.deleteDish(DishId);
+    @DeleteMapping(path = "/{dishId}")
+    @PreAuthorize("hasAuthority('delete:dishes')")
+    public void deleteDish(@PathVariable("dishId") Integer dishId) {
+        dishService.deleteDish(dishId);
     }
 }

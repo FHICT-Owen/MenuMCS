@@ -1,8 +1,11 @@
 package com.digitalmenu.menuservice.exception;
 
+import com.digitalmenu.menuservice.exception.common.ElementAlreadyExistsException;
+import com.digitalmenu.menuservice.exception.common.NoSuchElementFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -41,6 +44,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ResponseStatus(HttpStatus.CONFLICT)
     public ResponseEntity<Object> handleElementAlreadyExists(ElementAlreadyExistsException itemAlreadyExistsException) {
         return buildErrorResponse(itemAlreadyExistsException, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseEntity<Object> handleAccessDeniedException() {
+        return buildErrorResponse("Access denied", HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(Exception.class)

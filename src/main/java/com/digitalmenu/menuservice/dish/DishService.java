@@ -19,10 +19,8 @@ public class DishService {
 
     public Dish createDish(Dish dish) {
         System.out.println("WJDJAWIDAWJODJAWO");
-
         if (dishRepository.existsDishByName(dish.getName()))
             throw new ElementAlreadyExistsException("Dish with name: " + dish.getName() + " already exists");
-        System.out.println("YOOOOOOOOO");
 
         return dishRepository.save(dish);
     }

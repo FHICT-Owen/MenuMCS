@@ -1,10 +1,9 @@
 package com.digitalmenu.menuservice.category;
 
-import com.digitalmenu.menuservice.exception.ElementAlreadyExistsException;
-import com.digitalmenu.menuservice.exception.NoSuchElementFoundException;
+import com.digitalmenu.menuservice.exception.common.ElementAlreadyExistsException;
+import com.digitalmenu.menuservice.exception.common.NoSuchElementFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 

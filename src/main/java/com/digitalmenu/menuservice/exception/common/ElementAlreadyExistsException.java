@@ -1,4 +1,4 @@
-package com.digitalmenu.menuservice.exception;
+package com.digitalmenu.menuservice.exception.common;
 
 public class ElementAlreadyExistsException extends RuntimeException {
 

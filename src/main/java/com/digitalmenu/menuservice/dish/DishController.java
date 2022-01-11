@@ -22,18 +22,19 @@ public class DishController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('create:dishes')")
+//    @PreAuthorize("hasAuthority('create:dish')")
     public ResponseEntity<Dish> createDish(@RequestBody @Valid Dish dish) {
         return new ResponseEntity<>(dishService.createDish(dish), HttpStatus.CREATED);
     }
 
     @PutMapping
+//    @PreAuthorize("hasAuthority('update:dish')")
     public ResponseEntity<Dish> updateDish(@RequestBody @Valid Dish dish) {
         return new ResponseEntity<>(dishService.updateDish(dish), HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping(path = "/{dishId}")
-    @PreAuthorize("hasAuthority('delete:dishes')")
+//    @PreAuthorize("hasAuthority('delete:dish')")
     public void deleteDish(@PathVariable("dishId") Integer dishId) {
         dishService.deleteDish(dishId);
     }

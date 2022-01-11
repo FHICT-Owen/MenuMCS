@@ -22,19 +22,19 @@ public class CategoryController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('create:categories')")
+//    @PreAuthorize("hasAuthority('create:categories')")
     public ResponseEntity<Category> createCategory(@RequestBody @Valid Category category) {
         return new ResponseEntity<>(categoryService.createCategory(category), HttpStatus.CREATED);
     }
 
     @PutMapping
-    @PreAuthorize("hasAuthority('update:categories')")
+//    @PreAuthorize("hasAuthority('update:categories')")
     public ResponseEntity<Category> updateCategory(@RequestBody @Valid Category category) {
         return new ResponseEntity<>(categoryService.updateCategory(category), HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping(path = "/{categoryId}")
-    @PreAuthorize("hasAuthority('delete:categories')")
+//    @PreAuthorize("hasAuthority('delete:categories')")
     public void deleteCategory(@PathVariable("categoryId") Integer categoryId) {
         categoryService.deleteCategory(categoryId);
     }

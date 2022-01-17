@@ -1,11 +1,15 @@
 package com.digitalmenu.menuservice.category;
+
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import javax.persistence.EntityExistsException;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -36,23 +40,47 @@ public class CategoryServiceTest {
     @Test
     void canCreateCategory() {
         // given
-        Category category = new Category(
+        Category expected = new Category(
                 1,
-                "Meat"
+                "Meat",
+                "vlees"
         );
 
         // when
-        underTest.createCategory(category);
+        underTest.createCategory(expected);
 
-        // then
         ArgumentCaptor<Category> dishArgumentCaptor =
                 ArgumentCaptor.forClass(Category.class);
         verify(categoryRepository)
                 .save(dishArgumentCaptor.capture());
 
-        Category capturedCategory = dishArgumentCaptor.getValue();
+        Category actual = dishArgumentCaptor.getValue();
 
-        assertThat(capturedCategory).isEqualTo(category);
+        // then
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    @Disabled
+    void updateCategory() {
+        // given
+        Category category = new Category(
+                1,
+                "meat",
+                "vlees"
+        );
+        categoryRepository.save(category);
+
+        //when
+        Category newCategory = new Category(
+                1,
+                "vegetables",
+                "groente"
+        );
+        underTest.updateCategory(newCategory);
+
+        // then
+//        assertThat(underTest.getCategoryByName("vegetables")).isNotEqualTo(category);
     }
 
     @Test
@@ -60,7 +88,8 @@ public class CategoryServiceTest {
         // given
         Category category = new Category(
                 1,
-                "Meat"
+                "Meat",
+                "vlees"
         );
 
         given(categoryRepository.findCategoryByName(anyString()))

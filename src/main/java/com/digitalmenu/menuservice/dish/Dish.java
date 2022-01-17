@@ -1,9 +1,26 @@
 package com.digitalmenu.menuservice.dish;
 
+import com.vladmihalcea.hibernate.type.array.ListArrayType;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 @Entity
 @Table
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@TypeDef(
+        name = "list-array",
+        typeClass = ListArrayType.class
+)
 public class Dish {
     @Id
     @SequenceGenerator(
@@ -16,16 +33,32 @@ public class Dish {
             generator = "dish_sequence"
     )
     private Integer id;
+    @NotBlank
+    @Column(nullable = false)
     private String name;
+    @NotBlank
+    @Column(nullable = false)
+    private String name_NL;
+    @NotBlank
+    @Column(nullable = false)
     private String description;
-    private Byte[] image;
+    @NotBlank
+    @Column(nullable = false)
+    private String description_NL;
+    @NotBlank
+    @Column(nullable = false)
     private String category;
-
-    public Dish() { }
-
-    public Dish(String name) {
-        this.name = name;
-    }
+    @Type(type = "list-array")
+    @Column(columnDefinition = "text[]")
+    private List<String> dietaryRestrictions;
+    @Type(type = "list-array")
+    @Column(columnDefinition = "text[]")
+    private List<String> ingredients;
+    @Min(0)
+    @Column(nullable = false)
+    private Double prize;
+    @Type(type = "org.hibernate.type.TextType")
+    private String image;
 
     public Dish(Integer id, String name, String description, String category) {
         this.id = id;
@@ -34,43 +67,12 @@ public class Dish {
         this.category = category;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
+    public Dish(Integer id, String name) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Byte[] getImage() {
-        return image;
-    }
-
-    public void setImage(Byte[] image) {
-        this.image = image;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
+    public Dish(String name) {
+        this.name = name;
     }
 }
